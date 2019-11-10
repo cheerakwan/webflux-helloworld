@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="default,local">
+        <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+        <!--<logger name="org.hibernate.SQL" level="DEBUG"/>-->
+        <!--<logger name="org.hibernate.tool.hbm2ddl" level="DEBUG"/>-->
+
+        <!--Spring Web Service Payload Logging-->
+        <!--<logger name="org.springframework.ws.client.MessageTracing">-->
+            <!--<level value="TRACE"/>-->
+        <!--</logger>-->
+        <!--<logger name="org.springframework.ws.server.MessageTracing">-->
+            <!--<level value="TRACE"/>-->
+        <!--</logger>-->
+        <logger name="com.cheerakwan" level="DEBUG"/>
+    </springProfile>
+
+    <springProfile name="prod,perf,uat,dev">
+        <property name="POD_ID" value="${POD_ID:-${HOSTNAME:-local}}"/>
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <customFields>{"service":"hello-world"}</customFields>
+                <fieldNames>
+                    <timestamp>time</timestamp>
+                    <message>msg</message>
+                </fieldNames>
+            </encoder>
+        </appender>
+
+        <!-- Spring Web Service Payload Logging-->
+        <!--<logger name="org.springframework.ws.client.MessageTracing">-->
+            <!--<level value="TRACE"/>-->
+        <!--</logger>-->
+        <!--<logger name="org.springframework.ws.server.MessageTracing">-->
+            <!--<level value="TRACE"/>-->
+        <!--</logger>-->
+
+        <logger name="com.cheerakwan" level="DEBUG"/>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+</configuration>
